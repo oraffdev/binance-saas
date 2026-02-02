@@ -15,11 +15,10 @@ export class TradeScheduler {
 		private readonly encryption: EncryptionService,
 	) {}
 
-	@Cron(CronExpression.EVERY_HOUR) // Executa a cada hora cheia
+	@Cron(CronExpression.EVERY_MINUTE) // Executa a cada hora cheia
 	async handleCron() {
 		this.logger.log("🔄 Iniciando ciclo de trading Multi-User...");
 
-		// 1. Buscar usuários ativos no banco
 		const users = await this.prisma.user.findMany({
 			where: { isActive: true },
 		});
@@ -37,10 +36,17 @@ export class TradeScheduler {
 			const secret = this.encryption.decrypt(user.apiSecret);
 
 			// 3. Conectar na Binance
-			const exchange = new ccxt.binanceusdm({ apiKey, secret });
-			exchange.setSandboxMode(true); // <--- MODO TESTNET ATIVADO
+			const exchange = new ccxt.binance({
+				apiKey,
+				secret,
 
-			// 4. Verificar "Amnésia" (Se já existe trade aberto no banco)
+				options: {
+					defaultType: "future",
+				},
+			});
+			exchange.setSandboxMode(true);
+			await exchange.loadMarkets();
+
 			const openTrade = await this.prisma.trade.findFirst({
 				where: { userId: user.id, status: "OPEN" },
 			});

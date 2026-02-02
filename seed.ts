@@ -1,8 +1,7 @@
-// seed.ts
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./src/app.module";
-import { PrismaService } from "./src/prisma/prisma.service";
 import { EncryptionService } from "./src/common/services/encryption.service";
+import { PrismaService } from "./src/prisma/prisma.service";
 
 async function bootstrap() {
 	const app = await NestFactory.createApplicationContext(AppModule);

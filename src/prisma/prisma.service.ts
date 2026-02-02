@@ -11,6 +11,7 @@ export class PrismaService
 		const adapter = new PrismaPg({
 			user: "admin",
 			password: "secure_password_123",
+			database: "trading_bot",
 		});
 		super({ adapter });
 	}
