@@ -1,88 +1,116 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { StrategyService } from "../strategy/strategy.service";
-import * as ccxt from "ccxt"; // Usaremos ccxt para facilitar a conexão na Fase 1
+import { PrismaService } from "../prisma/prisma.service";
+import { EncryptionService } from "../common/services/encryption.service";
+import * as ccxt from "ccxt";
 
 @Injectable()
 export class TradeScheduler {
 	private readonly logger = new Logger(TradeScheduler.name);
-	private exchange: ccxt.Exchange;
 
-	constructor(private readonly strategyService: StrategyService) {
-		// Inicializa conexão com Binance Testnet (Futuros)
-		this.exchange = new ccxt.binanceusdm({
-			apiKey: process.env.BINANCE_API_KEY, // Nunca hardcode chaves!
-			secret: process.env.BINANCE_API_SECRET,
-			options: { defaultType: "future" }, // Importante: Futuros
+	constructor(
+		private readonly strategyService: StrategyService,
+		private readonly prisma: PrismaService,
+		private readonly encryption: EncryptionService,
+	) {}
+
+	@Cron(CronExpression.EVERY_HOUR) // Executa a cada hora cheia
+	async handleCron() {
+		this.logger.log("🔄 Iniciando ciclo de trading Multi-User...");
+
+		// 1. Buscar usuários ativos no banco
+		const users = await this.prisma.user.findMany({
+			where: { isActive: true },
 		});
-		this.exchange.setSandboxMode(true); // Ativa modo Testnet
+		this.logger.log(`👥 Encontrados ${users.length} usuários ativos.`);
+
+		for (const user of users) {
+			await this.processUser(user);
+		}
 	}
 
-	// Executa a cada 1 hora (Cron Job)
-	// Para testes, você pode mudar para CronExpression.EVERY_MINUTE
-	@Cron(CronExpression.EVERY_HOUR)
-	async handleCron() {
-		this.logger.log("⏰ Iniciando ciclo de trading...");
-
+	private async processUser(user: any) {
 		try {
-			// 1. Buscar Dados (Candles)
-			// Symbol: SOL/USDT, Timeframe: 1h, Limit: 300 (para ter histórico p/ EMA200)
-			const ohlcv = await this.exchange.fetchOHLCV(
-				"SOL/USDT",
-				"1h",
-				undefined,
-				300,
-			);
+			// 2. Descriptografar chaves
+			const apiKey = this.encryption.decrypt(user.apiKey);
+			const secret = this.encryption.decrypt(user.apiSecret);
 
-			// Mapear resposta do ccxt para nossa interface CandleData
-			const candles = ohlcv.map((c) => ({
-				open: c[1],
-				high: c[2],
-				low: c[3],
-				close: c[4],
-				volume: c[5],
-				closeTime: c[0],
-			}));
+			// 3. Conectar na Binance
+			const exchange = new ccxt.binanceusdm({ apiKey, secret });
+			exchange.setSandboxMode(true); // <--- MODO TESTNET ATIVADO
 
-			// 2. Executar Estratégia
+			// 4. Verificar "Amnésia" (Se já existe trade aberto no banco)
+			const openTrade = await this.prisma.trade.findFirst({
+				where: { userId: user.id, status: "OPEN" },
+			});
+
+			// 5. Baixar dados de mercado
+			const candles = await this.fetchCandles(exchange, "SOL/USDT");
+			const currentPrice = candles[candles.length - 1].close;
+
+			if (openTrade) {
+				this.logger.log(
+					`🛡️ User ${user.email} já tem trade aberto (Entrada: ${openTrade.entryPrice}). Ignorando novos sinais.`,
+				);
+				// Futuro: Aqui implementaríamos a lógica de saída (Take Profit / Stop Loss)
+				return;
+			}
+
+			// 6. Analisar Mercado
 			const signal = this.strategyService.analyzeMarket(candles);
 
-			// 3. Executar Ação (Fase 1: Execução Direta)
 			if (signal.action !== "NEUTRAL") {
-				this.logger.log(
-					`🚀 SINAL DETECTADO: ${signal.action} @ ${signal.price}`,
+				this.logger.log(`🚀 SINAL ${signal.action} para ${user.email}`);
+				await this.executeTrade(
+					exchange,
+					user.id,
+					signal.action,
+					0.1,
+					currentPrice,
 				);
-
-				// Na Fase 1, executamos a ordem diretamente aqui
-				await this.executeOrder(signal.action, 0.1); // Ex: 0.1 SOL
 			} else {
-				this.logger.log("😴 Mercado neutro. Nenhuma ação tomada.");
+				this.logger.debug(`💤 User ${user.email}: Mercado Neutro.`);
 			}
-		} catch (error) {
-			this.logger.error("Erro no ciclo de trading", error);
+		} catch (e) {
+			this.logger.error(`Erro processando user ${user.email}: ${e.message}`);
 		}
 	}
 
-	private async executeOrder(side: string, amount: number) {
-		// Mapeamento simples para ordem de mercado
-		const type = "market";
-		const symbol = "SOL/USDT";
-		const sideCcxt = side === "BUY_LONG" ? "buy" : "sell";
+	private async executeTrade(
+		exchange: ccxt.Exchange,
+		userId: string,
+		side: string,
+		amount: number,
+		price: number,
+	) {
+		// A. Executa na Binance
+		// const binanceSide = side === 'BUY_LONG' ? 'buy' : 'sell';
+		// await exchange.createOrder('SOL/USDT', 'market', binanceSide, amount);
 
-		try {
-			// Cria a ordem de mercado
-			const order = await this.exchange.createOrder(
-				symbol,
-				type,
-				sideCcxt,
+		// B. Salva no Banco ("Memória")
+		await this.prisma.trade.create({
+			data: {
+				userId,
+				symbol: "SOL/USDT",
+				status: "OPEN",
+				side,
 				amount,
-			);
-			this.logger.log(`✅ Ordem executada! ID: ${order.id}`);
+				entryPrice: price,
+			},
+		});
+		this.logger.log(`✅ Trade salvo no banco com sucesso!`);
+	}
 
-			// Nota: Em um cenário real, aqui colocaríamos o Stop Loss e Take Profit (OCO)
-			// Mas a API de Futuros exige chamadas separadas para SL/TP em muitos casos.
-		} catch (e) {
-			this.logger.error("Falha ao executar ordem na Binance", e);
-		}
+	private async fetchCandles(exchange: ccxt.Exchange, symbol: string) {
+		const ohlcv = await exchange.fetchOHLCV(symbol, "1h", undefined, 200);
+		return ohlcv.map((c) => ({
+			open: c[1],
+			high: c[2],
+			low: c[3],
+			close: c[4],
+			volume: c[5],
+			closeTime: c[0],
+		}));
 	}
 }
