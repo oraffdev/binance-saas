@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const Timeframe = {
+  M15: 'M15',
+  H1: 'H1',
+  H4: 'H4'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type Timeframe = (typeof Timeframe)[keyof typeof Timeframe]

@@ -14,31 +14,55 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  apiKey    String
-  apiSecret String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-
-  trades Trade[]
+// Adicione este Enum para travar os timeframes permitidos
+enum Timeframe {
+  M15 // 15 minutos
+  H1 // 1 hora
+  H4 // 4 horas
 }
 
-// Tabela de Trades (Histórico)
-model Trade {
-  id         String @id @default(uuid())
-  symbol     String // Ex: SOL/USDT
-  status     String // OPEN, CLOSED
-  side       String // BUY_LONG, SELL_SHORT
-  amount     Float // Quantidade da moeda
-  entryPrice Float // Preço de entrada
-  exitPrice  Float? // Pode ser nulo se ainda estiver aberto
-  pnl        Float? // Lucro/Prejuízo (Profit and Loss)
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  apiKey    String
+  apiSecret String
+  isActive  Boolean @default(true)
 
-  openedAt DateTime  @default(now())
-  closedAt DateTime?
+  bots      Bot[]    @relation("UserBots") // Um usuário tem muitos bots
+  createdAt DateTime @default(now())
+}
+
+model Bot {
+  id        String    @id @default(uuid())
+  name      String // Ex: "Estratégia Agressiva XRP"
+  symbol    String // Ex: "XRP/USDT"
+  timeframe Timeframe // Ex: M15, H1
+
+  amount   Float   @default(1) // Quanto apostar em USDT
+  tp       Float // Take Profit (ex: 0.015 para 1.5%)
+  sl       Float // Stop Loss (ex: 0.01 para 1%)
+  isActive Boolean @default(true)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation("UserBots", fields: [userId], references: [id])
+
+  trades Trade[] @relation("BotTrades") // Um bot faz muitos trades
+}
+
+model Trade {
+  id    String @id @default(uuid())
+  botId String
+  bot   Bot    @relation("BotTrades", fields: [botId], references: [id])
+
+  symbol     String
+  status     String // OPEN, CLOSED
+  side       String // BUY_LONG, SELL_SHORT
+  amount     Float
+  entryPrice Float
+  exitPrice  Float?
+  pnl        Float?
+  exitReason String?
+
+  createdAt DateTime  @default(now())
+  closedAt  DateTime?
 }

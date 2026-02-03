@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  Bot: 'Bot',
   Trade: 'Trade'
 } as const
 
@@ -401,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "trade"
+    modelProps: "user" | "bot" | "trade"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -476,6 +477,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    Bot: {
+      payload: Prisma.$BotPayload<ExtArgs>
+      fields: Prisma.BotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>
+        }
+        findFirst: {
+          args: Prisma.BotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>
+        }
+        findMany: {
+          args: Prisma.BotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>[]
+        }
+        create: {
+          args: Prisma.BotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>
+        }
+        createMany: {
+          args: Prisma.BotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>[]
+        }
+        delete: {
+          args: Prisma.BotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>
+        }
+        update: {
+          args: Prisma.BotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>
+        }
+        deleteMany: {
+          args: Prisma.BotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>[]
+        }
+        upsert: {
+          args: Prisma.BotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BotPayload>
+        }
+        aggregate: {
+          args: Prisma.BotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBot>
+        }
+        groupBy: {
+          args: Prisma.BotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BotCountAggregateOutputType> | number
         }
       }
     }
@@ -604,8 +679,24 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const BotScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  symbol: 'symbol',
+  timeframe: 'timeframe',
+  amount: 'amount',
+  tp: 'tp',
+  sl: 'sl',
+  isActive: 'isActive',
+  userId: 'userId'
+} as const
+
+export type BotScalarFieldEnum = (typeof BotScalarFieldEnum)[keyof typeof BotScalarFieldEnum]
+
+
 export const TradeScalarFieldEnum = {
   id: 'id',
+  botId: 'botId',
   symbol: 'symbol',
   status: 'status',
   side: 'side',
@@ -613,9 +704,9 @@ export const TradeScalarFieldEnum = {
   entryPrice: 'entryPrice',
   exitPrice: 'exitPrice',
   pnl: 'pnl',
-  openedAt: 'openedAt',
-  closedAt: 'closedAt',
-  userId: 'userId'
+  exitReason: 'exitReason',
+  createdAt: 'createdAt',
+  closedAt: 'closedAt'
 } as const
 
 export type TradeScalarFieldEnum = (typeof TradeScalarFieldEnum)[keyof typeof TradeScalarFieldEnum]
@@ -683,6 +774,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Timeframe'
+ */
+export type EnumTimeframeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Timeframe'>
+    
+
+
+/**
+ * Reference to a field of type 'Timeframe[]'
+ */
+export type ListEnumTimeframeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Timeframe[]'>
     
 
 
@@ -809,6 +914,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  bot?: Prisma.BotOmit
   trade?: Prisma.TradeOmit
 }
 

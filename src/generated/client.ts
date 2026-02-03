@@ -43,6 +43,11 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model Bot
+ * 
+ */
+export type Bot = Prisma.BotModel
+/**
  * Model Trade
  * 
  */

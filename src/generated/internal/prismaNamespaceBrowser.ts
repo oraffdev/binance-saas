@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Bot: 'Bot',
   Trade: 'Trade'
 } as const
 
@@ -83,8 +84,24 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const BotScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  symbol: 'symbol',
+  timeframe: 'timeframe',
+  amount: 'amount',
+  tp: 'tp',
+  sl: 'sl',
+  isActive: 'isActive',
+  userId: 'userId'
+} as const
+
+export type BotScalarFieldEnum = (typeof BotScalarFieldEnum)[keyof typeof BotScalarFieldEnum]
+
+
 export const TradeScalarFieldEnum = {
   id: 'id',
+  botId: 'botId',
   symbol: 'symbol',
   status: 'status',
   side: 'side',
@@ -92,9 +109,9 @@ export const TradeScalarFieldEnum = {
   entryPrice: 'entryPrice',
   exitPrice: 'exitPrice',
   pnl: 'pnl',
-  openedAt: 'openedAt',
-  closedAt: 'closedAt',
-  userId: 'userId'
+  exitReason: 'exitReason',
+  createdAt: 'createdAt',
+  closedAt: 'closedAt'
 } as const
 
 export type TradeScalarFieldEnum = (typeof TradeScalarFieldEnum)[keyof typeof TradeScalarFieldEnum]

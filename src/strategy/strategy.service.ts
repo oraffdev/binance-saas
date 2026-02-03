@@ -17,103 +17,102 @@ export interface TradeSignal {
 	price: number;
 }
 
+export interface StrategyResult {
+	action: "BUY_LONG" | "SELL_SHORT" | "NEUTRAL";
+	reason: string; // Explicação humana (ex: "RSI alto demais")
+	details: string; // Valores técnicos (ex: "RSI: 55 | Price: 100 > EMA: 90")
+}
+
 @Injectable()
 export class StrategyService {
+	private readonly RSI_LONG_THRESHOLD = 35;
+	private readonly RSI_SHORT_THRESHOLD = 65;
 	private readonly logger = new Logger(StrategyService.name);
 
 	/**
 	 * Analisa o mercado com base na estratégia Trend Following.
 	 * @param candles Array de candles (o mais recente é o último do array)
 	 */
-	public analyzeMarket(candles: CandleData[]): TradeSignal {
-		// Precisamos de dados suficientes para o EMA200
+	public analyzeMarket(candles: any[]): StrategyResult {
+		// Precisamos de pelo menos 200 candles para EMA
 		if (candles.length < 200) {
-			this.logger.warn("Dados insuficientes para calcular indicadores.");
-			return { action: "NEUTRAL", reason: "Not enough data", price: 0 };
+			return {
+				action: "NEUTRAL",
+				reason: "Dados insuficientes",
+				details: `Candles: ${candles.length}/200`,
+			};
 		}
 
-		// Extrair apenas os preços de fechamento para os cálculos
+		// 1. Prepara os dados (Array de preços de fechamento)
 		const closes = candles.map((c) => c.close);
 		const currentPrice = closes[closes.length - 1];
 
-		// 1. Calcular EMA 200 (Tendência de Longo Prazo)
-		const ema200Values = EMA.calculate({ period: 200, values: closes });
-		const lastEma200 = ema200Values[ema200Values.length - 1];
-
-		// 2. Calcular RSI 14 (Força Relativa)
-		const rsiValues = RSI.calculate({ period: 14, values: closes });
-		const lastRsi = rsiValues[rsiValues.length - 1];
-
-		// 3. Calcular MACD (Momentum)
-		// Configuração padrão MACD (12, 26, 9)
-		const macdValues = MACD.calculate({
+		// 2. Calcula Indicadores
+		// RSI (14 períodos)
+		const rsiValues = RSI.calculate({
 			values: closes,
-			fastPeriod: 12,
-			slowPeriod: 26,
-			signalPeriod: 9,
-			SimpleMAOscillator: false,
-			SimpleMASignal: false,
+			period: 14,
 		});
-		const lastMacd = macdValues[macdValues.length - 1];
-		const prevMacd = macdValues[macdValues.length - 2];
+		const rsi = rsiValues[rsiValues.length - 1];
 
-		if (
-			!prevMacd ||
-			!lastMacd ||
-			prevMacd.MACD === undefined ||
-			prevMacd.signal === undefined ||
-			lastMacd.MACD === undefined ||
-			lastMacd.signal === undefined
-		) {
-			this.logger.warn(
-				"Dados de MACD insuficientes ou inválidos para a análise.",
-			);
-			return {
-				action: "NEUTRAL",
-				reason: "Insufficient or invalid MACD data",
-				price: currentPrice,
-			};
+		// EMA (200 períodos - Tendência)
+		const emaValues = EMA.calculate({
+			values: closes,
+			period: 200,
+		});
+		const ema = emaValues[emaValues.length - 1];
+
+		// Formatação para logs (arredondar valores)
+		const rsiFmt = rsi.toFixed(2);
+		const priceFmt = currentPrice.toFixed(4);
+		const emaFmt = ema.toFixed(4);
+
+		// String de detalhes técnicos para logar sempre
+		const details = `Preço: ${priceFmt} | EMA200: ${emaFmt} | RSI: ${rsiFmt}`;
+
+		// 3. Lógica de Decisão (O "Cérebro")
+
+		// --- ANÁLISE PARA LONG (COMPRA) ---
+		// Regra: Preço ACIMA da EMA (Tendência Alta) + RSI BAIXO (Correção/Oportunidade)
+		if (currentPrice > ema) {
+			if (rsi < this.RSI_LONG_THRESHOLD) {
+				return {
+					action: "BUY_LONG",
+					reason: "Tendência de Alta confirmada + RSI Sobrevendido",
+					details,
+				};
+			}
+			// Se está acima da EMA mas RSI não está baixo
+			else {
+				return {
+					action: "NEUTRAL",
+					reason: `Tendência de Alta (OK), mas RSI ${rsiFmt} ainda não está baixo o suficiente (< ${this.RSI_LONG_THRESHOLD})`,
+					details,
+				};
+			}
 		}
 
-		// Lógica de Cruzamento do MACD (Histograma ou Linha MACD x Sinal)
-		// Bullish Cross: Linha MACD cruza para cima da Linha de Sinal
-		const isMacdBullish =
-			prevMacd.MACD <= prevMacd.signal && lastMacd.MACD > lastMacd.signal;
-
-		// Bearish Cross: Linha MACD cruza para baixo da Linha de Sinal
-		const isMacdBearish =
-			prevMacd.MACD >= prevMacd.signal && lastMacd.MACD < lastMacd.signal;
-
-		this.logger.log(
-			`Análise: Preço(${currentPrice}) | EMA200(${lastEma200.toFixed(2)}) | RSI(${lastRsi.toFixed(2)})`,
-		);
-
-		// --- APLICAÇÃO DAS REGRAS DE NEGÓCIO ---
-
-		// REGRA DE COMPRA (LONG)
-		// 1. Preço ACIMA da EMA200 (Tendência de alta)
-		// 2. RSI < 70 (Ainda tem espaço para subir, não está sobrecomprado)
-		// 3. MACD Cruzamento de Alta (Momentum positivo iniciando)
-		if (currentPrice > lastEma200 && lastRsi < 70 && isMacdBullish) {
-			return {
-				action: "BUY_LONG",
-				reason: "Trend Bullish + RSI OK + MACD Cross Up",
-				price: currentPrice,
-			};
+		// --- ANÁLISE PARA SHORT (VENDA) ---
+		// Regra: Preço ABAIXO da EMA (Tendência Baixa) + RSI ALTO (Repique/Oportunidade)
+		else if (currentPrice < ema) {
+			if (rsi > this.RSI_SHORT_THRESHOLD) {
+				return {
+					action: "SELL_SHORT",
+					reason: "Tendência de Baixa confirmada + RSI Sobrecomprado",
+					details,
+				};
+			}
+			// Se está abaixo da EMA mas RSI não está alto
+			else {
+				return {
+					action: "NEUTRAL",
+					reason: `Tendência de Baixa (OK), mas RSI ${rsiFmt} ainda não está alto o suficiente (> ${this.RSI_SHORT_THRESHOLD})`,
+					details,
+				};
+			}
 		}
 
-		// REGRA DE VENDA (SHORT)
-		// 1. Preço ABAIXO da EMA200 (Tendência de baixa)
-		// 2. RSI > 30 (Ainda tem espaço para cair, não está sobrevendido)
-		// 3. MACD Cruzamento de Baixa (Momentum negativo iniciando)
-		if (currentPrice < lastEma200 && lastRsi > 30 && isMacdBearish) {
-			return {
-				action: "SELL_SHORT",
-				reason: "Trend Bearish + RSI OK + MACD Cross Down",
-				price: currentPrice,
-			};
-		}
-
-		return { action: "NEUTRAL", reason: "No setup found", price: currentPrice };
+		// Fallback (caso raro onde preço == ema)
+		return { action: "NEUTRAL", reason: "Indefinido", details };
 	}
 }

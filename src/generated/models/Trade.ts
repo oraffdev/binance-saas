@@ -42,6 +42,7 @@ export type TradeSumAggregateOutputType = {
 
 export type TradeMinAggregateOutputType = {
   id: string | null
+  botId: string | null
   symbol: string | null
   status: string | null
   side: string | null
@@ -49,13 +50,14 @@ export type TradeMinAggregateOutputType = {
   entryPrice: number | null
   exitPrice: number | null
   pnl: number | null
-  openedAt: Date | null
+  exitReason: string | null
+  createdAt: Date | null
   closedAt: Date | null
-  userId: string | null
 }
 
 export type TradeMaxAggregateOutputType = {
   id: string | null
+  botId: string | null
   symbol: string | null
   status: string | null
   side: string | null
@@ -63,13 +65,14 @@ export type TradeMaxAggregateOutputType = {
   entryPrice: number | null
   exitPrice: number | null
   pnl: number | null
-  openedAt: Date | null
+  exitReason: string | null
+  createdAt: Date | null
   closedAt: Date | null
-  userId: string | null
 }
 
 export type TradeCountAggregateOutputType = {
   id: number
+  botId: number
   symbol: number
   status: number
   side: number
@@ -77,9 +80,9 @@ export type TradeCountAggregateOutputType = {
   entryPrice: number
   exitPrice: number
   pnl: number
-  openedAt: number
+  exitReason: number
+  createdAt: number
   closedAt: number
-  userId: number
   _all: number
 }
 
@@ -100,6 +103,7 @@ export type TradeSumAggregateInputType = {
 
 export type TradeMinAggregateInputType = {
   id?: true
+  botId?: true
   symbol?: true
   status?: true
   side?: true
@@ -107,13 +111,14 @@ export type TradeMinAggregateInputType = {
   entryPrice?: true
   exitPrice?: true
   pnl?: true
-  openedAt?: true
+  exitReason?: true
+  createdAt?: true
   closedAt?: true
-  userId?: true
 }
 
 export type TradeMaxAggregateInputType = {
   id?: true
+  botId?: true
   symbol?: true
   status?: true
   side?: true
@@ -121,13 +126,14 @@ export type TradeMaxAggregateInputType = {
   entryPrice?: true
   exitPrice?: true
   pnl?: true
-  openedAt?: true
+  exitReason?: true
+  createdAt?: true
   closedAt?: true
-  userId?: true
 }
 
 export type TradeCountAggregateInputType = {
   id?: true
+  botId?: true
   symbol?: true
   status?: true
   side?: true
@@ -135,9 +141,9 @@ export type TradeCountAggregateInputType = {
   entryPrice?: true
   exitPrice?: true
   pnl?: true
-  openedAt?: true
+  exitReason?: true
+  createdAt?: true
   closedAt?: true
-  userId?: true
   _all?: true
 }
 
@@ -229,6 +235,7 @@ export type TradeGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type TradeGroupByOutputType = {
   id: string
+  botId: string
   symbol: string
   status: string
   side: string
@@ -236,9 +243,9 @@ export type TradeGroupByOutputType = {
   entryPrice: number
   exitPrice: number | null
   pnl: number | null
-  openedAt: Date
+  exitReason: string | null
+  createdAt: Date
   closedAt: Date | null
-  userId: string
   _count: TradeCountAggregateOutputType | null
   _avg: TradeAvgAggregateOutputType | null
   _sum: TradeSumAggregateOutputType | null
@@ -266,6 +273,7 @@ export type TradeWhereInput = {
   OR?: Prisma.TradeWhereInput[]
   NOT?: Prisma.TradeWhereInput | Prisma.TradeWhereInput[]
   id?: Prisma.StringFilter<"Trade"> | string
+  botId?: Prisma.StringFilter<"Trade"> | string
   symbol?: Prisma.StringFilter<"Trade"> | string
   status?: Prisma.StringFilter<"Trade"> | string
   side?: Prisma.StringFilter<"Trade"> | string
@@ -273,14 +281,15 @@ export type TradeWhereInput = {
   entryPrice?: Prisma.FloatFilter<"Trade"> | number
   exitPrice?: Prisma.FloatNullableFilter<"Trade"> | number | null
   pnl?: Prisma.FloatNullableFilter<"Trade"> | number | null
-  openedAt?: Prisma.DateTimeFilter<"Trade"> | Date | string
+  exitReason?: Prisma.StringNullableFilter<"Trade"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Trade"> | Date | string
   closedAt?: Prisma.DateTimeNullableFilter<"Trade"> | Date | string | null
-  userId?: Prisma.StringFilter<"Trade"> | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  bot?: Prisma.XOR<Prisma.BotScalarRelationFilter, Prisma.BotWhereInput>
 }
 
 export type TradeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  botId?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   status?: Prisma.SortOrder
   side?: Prisma.SortOrder
@@ -288,10 +297,10 @@ export type TradeOrderByWithRelationInput = {
   entryPrice?: Prisma.SortOrder
   exitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   pnl?: Prisma.SortOrderInput | Prisma.SortOrder
-  openedAt?: Prisma.SortOrder
+  exitReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  bot?: Prisma.BotOrderByWithRelationInput
 }
 
 export type TradeWhereUniqueInput = Prisma.AtLeast<{
@@ -299,6 +308,7 @@ export type TradeWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TradeWhereInput | Prisma.TradeWhereInput[]
   OR?: Prisma.TradeWhereInput[]
   NOT?: Prisma.TradeWhereInput | Prisma.TradeWhereInput[]
+  botId?: Prisma.StringFilter<"Trade"> | string
   symbol?: Prisma.StringFilter<"Trade"> | string
   status?: Prisma.StringFilter<"Trade"> | string
   side?: Prisma.StringFilter<"Trade"> | string
@@ -306,14 +316,15 @@ export type TradeWhereUniqueInput = Prisma.AtLeast<{
   entryPrice?: Prisma.FloatFilter<"Trade"> | number
   exitPrice?: Prisma.FloatNullableFilter<"Trade"> | number | null
   pnl?: Prisma.FloatNullableFilter<"Trade"> | number | null
-  openedAt?: Prisma.DateTimeFilter<"Trade"> | Date | string
+  exitReason?: Prisma.StringNullableFilter<"Trade"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Trade"> | Date | string
   closedAt?: Prisma.DateTimeNullableFilter<"Trade"> | Date | string | null
-  userId?: Prisma.StringFilter<"Trade"> | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  bot?: Prisma.XOR<Prisma.BotScalarRelationFilter, Prisma.BotWhereInput>
 }, "id">
 
 export type TradeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  botId?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   status?: Prisma.SortOrder
   side?: Prisma.SortOrder
@@ -321,9 +332,9 @@ export type TradeOrderByWithAggregationInput = {
   entryPrice?: Prisma.SortOrder
   exitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   pnl?: Prisma.SortOrderInput | Prisma.SortOrder
-  openedAt?: Prisma.SortOrder
+  exitReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
   _count?: Prisma.TradeCountOrderByAggregateInput
   _avg?: Prisma.TradeAvgOrderByAggregateInput
   _max?: Prisma.TradeMaxOrderByAggregateInput
@@ -336,6 +347,7 @@ export type TradeScalarWhereWithAggregatesInput = {
   OR?: Prisma.TradeScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TradeScalarWhereWithAggregatesInput | Prisma.TradeScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Trade"> | string
+  botId?: Prisma.StringWithAggregatesFilter<"Trade"> | string
   symbol?: Prisma.StringWithAggregatesFilter<"Trade"> | string
   status?: Prisma.StringWithAggregatesFilter<"Trade"> | string
   side?: Prisma.StringWithAggregatesFilter<"Trade"> | string
@@ -343,9 +355,9 @@ export type TradeScalarWhereWithAggregatesInput = {
   entryPrice?: Prisma.FloatWithAggregatesFilter<"Trade"> | number
   exitPrice?: Prisma.FloatNullableWithAggregatesFilter<"Trade"> | number | null
   pnl?: Prisma.FloatNullableWithAggregatesFilter<"Trade"> | number | null
-  openedAt?: Prisma.DateTimeWithAggregatesFilter<"Trade"> | Date | string
+  exitReason?: Prisma.StringNullableWithAggregatesFilter<"Trade"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Trade"> | Date | string
   closedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Trade"> | Date | string | null
-  userId?: Prisma.StringWithAggregatesFilter<"Trade"> | string
 }
 
 export type TradeCreateInput = {
@@ -357,13 +369,15 @@ export type TradeCreateInput = {
   entryPrice: number
   exitPrice?: number | null
   pnl?: number | null
-  openedAt?: Date | string
+  exitReason?: string | null
+  createdAt?: Date | string
   closedAt?: Date | string | null
-  user: Prisma.UserCreateNestedOneWithoutTradesInput
+  bot: Prisma.BotCreateNestedOneWithoutTradesInput
 }
 
 export type TradeUncheckedCreateInput = {
   id?: string
+  botId: string
   symbol: string
   status: string
   side: string
@@ -371,9 +385,9 @@ export type TradeUncheckedCreateInput = {
   entryPrice: number
   exitPrice?: number | null
   pnl?: number | null
-  openedAt?: Date | string
+  exitReason?: string | null
+  createdAt?: Date | string
   closedAt?: Date | string | null
-  userId: string
 }
 
 export type TradeUpdateInput = {
@@ -385,13 +399,15 @@ export type TradeUpdateInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  user?: Prisma.UserUpdateOneRequiredWithoutTradesNestedInput
+  bot?: Prisma.BotUpdateOneRequiredWithoutTradesNestedInput
 }
 
 export type TradeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  botId?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   side?: Prisma.StringFieldUpdateOperationsInput | string
@@ -399,13 +415,14 @@ export type TradeUncheckedUpdateInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TradeCreateManyInput = {
   id?: string
+  botId: string
   symbol: string
   status: string
   side: string
@@ -413,9 +430,9 @@ export type TradeCreateManyInput = {
   entryPrice: number
   exitPrice?: number | null
   pnl?: number | null
-  openedAt?: Date | string
+  exitReason?: string | null
+  createdAt?: Date | string
   closedAt?: Date | string | null
-  userId: string
 }
 
 export type TradeUpdateManyMutationInput = {
@@ -427,12 +444,14 @@ export type TradeUpdateManyMutationInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TradeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  botId?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   side?: Prisma.StringFieldUpdateOperationsInput | string
@@ -440,9 +459,9 @@ export type TradeUncheckedUpdateManyInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TradeListRelationFilter = {
@@ -457,6 +476,7 @@ export type TradeOrderByRelationAggregateInput = {
 
 export type TradeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  botId?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   status?: Prisma.SortOrder
   side?: Prisma.SortOrder
@@ -464,9 +484,9 @@ export type TradeCountOrderByAggregateInput = {
   entryPrice?: Prisma.SortOrder
   exitPrice?: Prisma.SortOrder
   pnl?: Prisma.SortOrder
-  openedAt?: Prisma.SortOrder
+  exitReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type TradeAvgOrderByAggregateInput = {
@@ -478,6 +498,7 @@ export type TradeAvgOrderByAggregateInput = {
 
 export type TradeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  botId?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   status?: Prisma.SortOrder
   side?: Prisma.SortOrder
@@ -485,13 +506,14 @@ export type TradeMaxOrderByAggregateInput = {
   entryPrice?: Prisma.SortOrder
   exitPrice?: Prisma.SortOrder
   pnl?: Prisma.SortOrder
-  openedAt?: Prisma.SortOrder
+  exitReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type TradeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  botId?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   status?: Prisma.SortOrder
   side?: Prisma.SortOrder
@@ -499,9 +521,9 @@ export type TradeMinOrderByAggregateInput = {
   entryPrice?: Prisma.SortOrder
   exitPrice?: Prisma.SortOrder
   pnl?: Prisma.SortOrder
-  openedAt?: Prisma.SortOrder
+  exitReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type TradeSumOrderByAggregateInput = {
@@ -511,54 +533,46 @@ export type TradeSumOrderByAggregateInput = {
   pnl?: Prisma.SortOrder
 }
 
-export type TradeCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.TradeCreateWithoutUserInput, Prisma.TradeUncheckedCreateWithoutUserInput> | Prisma.TradeCreateWithoutUserInput[] | Prisma.TradeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutUserInput | Prisma.TradeCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.TradeCreateManyUserInputEnvelope
+export type TradeCreateNestedManyWithoutBotInput = {
+  create?: Prisma.XOR<Prisma.TradeCreateWithoutBotInput, Prisma.TradeUncheckedCreateWithoutBotInput> | Prisma.TradeCreateWithoutBotInput[] | Prisma.TradeUncheckedCreateWithoutBotInput[]
+  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutBotInput | Prisma.TradeCreateOrConnectWithoutBotInput[]
+  createMany?: Prisma.TradeCreateManyBotInputEnvelope
   connect?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
 }
 
-export type TradeUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.TradeCreateWithoutUserInput, Prisma.TradeUncheckedCreateWithoutUserInput> | Prisma.TradeCreateWithoutUserInput[] | Prisma.TradeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutUserInput | Prisma.TradeCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.TradeCreateManyUserInputEnvelope
+export type TradeUncheckedCreateNestedManyWithoutBotInput = {
+  create?: Prisma.XOR<Prisma.TradeCreateWithoutBotInput, Prisma.TradeUncheckedCreateWithoutBotInput> | Prisma.TradeCreateWithoutBotInput[] | Prisma.TradeUncheckedCreateWithoutBotInput[]
+  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutBotInput | Prisma.TradeCreateOrConnectWithoutBotInput[]
+  createMany?: Prisma.TradeCreateManyBotInputEnvelope
   connect?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
 }
 
-export type TradeUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.TradeCreateWithoutUserInput, Prisma.TradeUncheckedCreateWithoutUserInput> | Prisma.TradeCreateWithoutUserInput[] | Prisma.TradeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutUserInput | Prisma.TradeCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.TradeUpsertWithWhereUniqueWithoutUserInput | Prisma.TradeUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.TradeCreateManyUserInputEnvelope
+export type TradeUpdateManyWithoutBotNestedInput = {
+  create?: Prisma.XOR<Prisma.TradeCreateWithoutBotInput, Prisma.TradeUncheckedCreateWithoutBotInput> | Prisma.TradeCreateWithoutBotInput[] | Prisma.TradeUncheckedCreateWithoutBotInput[]
+  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutBotInput | Prisma.TradeCreateOrConnectWithoutBotInput[]
+  upsert?: Prisma.TradeUpsertWithWhereUniqueWithoutBotInput | Prisma.TradeUpsertWithWhereUniqueWithoutBotInput[]
+  createMany?: Prisma.TradeCreateManyBotInputEnvelope
   set?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
   disconnect?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
   delete?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
   connect?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
-  update?: Prisma.TradeUpdateWithWhereUniqueWithoutUserInput | Prisma.TradeUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.TradeUpdateManyWithWhereWithoutUserInput | Prisma.TradeUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.TradeUpdateWithWhereUniqueWithoutBotInput | Prisma.TradeUpdateWithWhereUniqueWithoutBotInput[]
+  updateMany?: Prisma.TradeUpdateManyWithWhereWithoutBotInput | Prisma.TradeUpdateManyWithWhereWithoutBotInput[]
   deleteMany?: Prisma.TradeScalarWhereInput | Prisma.TradeScalarWhereInput[]
 }
 
-export type TradeUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.TradeCreateWithoutUserInput, Prisma.TradeUncheckedCreateWithoutUserInput> | Prisma.TradeCreateWithoutUserInput[] | Prisma.TradeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutUserInput | Prisma.TradeCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.TradeUpsertWithWhereUniqueWithoutUserInput | Prisma.TradeUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.TradeCreateManyUserInputEnvelope
+export type TradeUncheckedUpdateManyWithoutBotNestedInput = {
+  create?: Prisma.XOR<Prisma.TradeCreateWithoutBotInput, Prisma.TradeUncheckedCreateWithoutBotInput> | Prisma.TradeCreateWithoutBotInput[] | Prisma.TradeUncheckedCreateWithoutBotInput[]
+  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutBotInput | Prisma.TradeCreateOrConnectWithoutBotInput[]
+  upsert?: Prisma.TradeUpsertWithWhereUniqueWithoutBotInput | Prisma.TradeUpsertWithWhereUniqueWithoutBotInput[]
+  createMany?: Prisma.TradeCreateManyBotInputEnvelope
   set?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
   disconnect?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
   delete?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
   connect?: Prisma.TradeWhereUniqueInput | Prisma.TradeWhereUniqueInput[]
-  update?: Prisma.TradeUpdateWithWhereUniqueWithoutUserInput | Prisma.TradeUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.TradeUpdateManyWithWhereWithoutUserInput | Prisma.TradeUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.TradeUpdateWithWhereUniqueWithoutBotInput | Prisma.TradeUpdateWithWhereUniqueWithoutBotInput[]
+  updateMany?: Prisma.TradeUpdateManyWithWhereWithoutBotInput | Prisma.TradeUpdateManyWithWhereWithoutBotInput[]
   deleteMany?: Prisma.TradeScalarWhereInput | Prisma.TradeScalarWhereInput[]
-}
-
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type NullableFloatFieldUpdateOperationsInput = {
@@ -569,11 +583,15 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type TradeCreateWithoutUserInput = {
+export type TradeCreateWithoutBotInput = {
   id?: string
   symbol: string
   status: string
@@ -582,11 +600,12 @@ export type TradeCreateWithoutUserInput = {
   entryPrice: number
   exitPrice?: number | null
   pnl?: number | null
-  openedAt?: Date | string
+  exitReason?: string | null
+  createdAt?: Date | string
   closedAt?: Date | string | null
 }
 
-export type TradeUncheckedCreateWithoutUserInput = {
+export type TradeUncheckedCreateWithoutBotInput = {
   id?: string
   symbol: string
   status: string
@@ -595,34 +614,35 @@ export type TradeUncheckedCreateWithoutUserInput = {
   entryPrice: number
   exitPrice?: number | null
   pnl?: number | null
-  openedAt?: Date | string
+  exitReason?: string | null
+  createdAt?: Date | string
   closedAt?: Date | string | null
 }
 
-export type TradeCreateOrConnectWithoutUserInput = {
+export type TradeCreateOrConnectWithoutBotInput = {
   where: Prisma.TradeWhereUniqueInput
-  create: Prisma.XOR<Prisma.TradeCreateWithoutUserInput, Prisma.TradeUncheckedCreateWithoutUserInput>
+  create: Prisma.XOR<Prisma.TradeCreateWithoutBotInput, Prisma.TradeUncheckedCreateWithoutBotInput>
 }
 
-export type TradeCreateManyUserInputEnvelope = {
-  data: Prisma.TradeCreateManyUserInput | Prisma.TradeCreateManyUserInput[]
+export type TradeCreateManyBotInputEnvelope = {
+  data: Prisma.TradeCreateManyBotInput | Prisma.TradeCreateManyBotInput[]
   skipDuplicates?: boolean
 }
 
-export type TradeUpsertWithWhereUniqueWithoutUserInput = {
+export type TradeUpsertWithWhereUniqueWithoutBotInput = {
   where: Prisma.TradeWhereUniqueInput
-  update: Prisma.XOR<Prisma.TradeUpdateWithoutUserInput, Prisma.TradeUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.TradeCreateWithoutUserInput, Prisma.TradeUncheckedCreateWithoutUserInput>
+  update: Prisma.XOR<Prisma.TradeUpdateWithoutBotInput, Prisma.TradeUncheckedUpdateWithoutBotInput>
+  create: Prisma.XOR<Prisma.TradeCreateWithoutBotInput, Prisma.TradeUncheckedCreateWithoutBotInput>
 }
 
-export type TradeUpdateWithWhereUniqueWithoutUserInput = {
+export type TradeUpdateWithWhereUniqueWithoutBotInput = {
   where: Prisma.TradeWhereUniqueInput
-  data: Prisma.XOR<Prisma.TradeUpdateWithoutUserInput, Prisma.TradeUncheckedUpdateWithoutUserInput>
+  data: Prisma.XOR<Prisma.TradeUpdateWithoutBotInput, Prisma.TradeUncheckedUpdateWithoutBotInput>
 }
 
-export type TradeUpdateManyWithWhereWithoutUserInput = {
+export type TradeUpdateManyWithWhereWithoutBotInput = {
   where: Prisma.TradeScalarWhereInput
-  data: Prisma.XOR<Prisma.TradeUpdateManyMutationInput, Prisma.TradeUncheckedUpdateManyWithoutUserInput>
+  data: Prisma.XOR<Prisma.TradeUpdateManyMutationInput, Prisma.TradeUncheckedUpdateManyWithoutBotInput>
 }
 
 export type TradeScalarWhereInput = {
@@ -630,6 +650,7 @@ export type TradeScalarWhereInput = {
   OR?: Prisma.TradeScalarWhereInput[]
   NOT?: Prisma.TradeScalarWhereInput | Prisma.TradeScalarWhereInput[]
   id?: Prisma.StringFilter<"Trade"> | string
+  botId?: Prisma.StringFilter<"Trade"> | string
   symbol?: Prisma.StringFilter<"Trade"> | string
   status?: Prisma.StringFilter<"Trade"> | string
   side?: Prisma.StringFilter<"Trade"> | string
@@ -637,12 +658,12 @@ export type TradeScalarWhereInput = {
   entryPrice?: Prisma.FloatFilter<"Trade"> | number
   exitPrice?: Prisma.FloatNullableFilter<"Trade"> | number | null
   pnl?: Prisma.FloatNullableFilter<"Trade"> | number | null
-  openedAt?: Prisma.DateTimeFilter<"Trade"> | Date | string
+  exitReason?: Prisma.StringNullableFilter<"Trade"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Trade"> | Date | string
   closedAt?: Prisma.DateTimeNullableFilter<"Trade"> | Date | string | null
-  userId?: Prisma.StringFilter<"Trade"> | string
 }
 
-export type TradeCreateManyUserInput = {
+export type TradeCreateManyBotInput = {
   id?: string
   symbol: string
   status: string
@@ -651,11 +672,12 @@ export type TradeCreateManyUserInput = {
   entryPrice: number
   exitPrice?: number | null
   pnl?: number | null
-  openedAt?: Date | string
+  exitReason?: string | null
+  createdAt?: Date | string
   closedAt?: Date | string | null
 }
 
-export type TradeUpdateWithoutUserInput = {
+export type TradeUpdateWithoutBotInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -664,11 +686,12 @@ export type TradeUpdateWithoutUserInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type TradeUncheckedUpdateWithoutUserInput = {
+export type TradeUncheckedUpdateWithoutBotInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -677,11 +700,12 @@ export type TradeUncheckedUpdateWithoutUserInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type TradeUncheckedUpdateManyWithoutUserInput = {
+export type TradeUncheckedUpdateManyWithoutBotInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -690,7 +714,8 @@ export type TradeUncheckedUpdateManyWithoutUserInput = {
   entryPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   exitPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   pnl?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  exitReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -698,6 +723,7 @@ export type TradeUncheckedUpdateManyWithoutUserInput = {
 
 export type TradeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  botId?: boolean
   symbol?: boolean
   status?: boolean
   side?: boolean
@@ -705,14 +731,15 @@ export type TradeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   entryPrice?: boolean
   exitPrice?: boolean
   pnl?: boolean
-  openedAt?: boolean
+  exitReason?: boolean
+  createdAt?: boolean
   closedAt?: boolean
-  userId?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bot?: boolean | Prisma.BotDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trade"]>
 
 export type TradeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  botId?: boolean
   symbol?: boolean
   status?: boolean
   side?: boolean
@@ -720,14 +747,15 @@ export type TradeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   entryPrice?: boolean
   exitPrice?: boolean
   pnl?: boolean
-  openedAt?: boolean
+  exitReason?: boolean
+  createdAt?: boolean
   closedAt?: boolean
-  userId?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bot?: boolean | Prisma.BotDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trade"]>
 
 export type TradeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  botId?: boolean
   symbol?: boolean
   status?: boolean
   side?: boolean
@@ -735,14 +763,15 @@ export type TradeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   entryPrice?: boolean
   exitPrice?: boolean
   pnl?: boolean
-  openedAt?: boolean
+  exitReason?: boolean
+  createdAt?: boolean
   closedAt?: boolean
-  userId?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bot?: boolean | Prisma.BotDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trade"]>
 
 export type TradeSelectScalar = {
   id?: boolean
+  botId?: boolean
   symbol?: boolean
   status?: boolean
   side?: boolean
@@ -750,29 +779,30 @@ export type TradeSelectScalar = {
   entryPrice?: boolean
   exitPrice?: boolean
   pnl?: boolean
-  openedAt?: boolean
+  exitReason?: boolean
+  createdAt?: boolean
   closedAt?: boolean
-  userId?: boolean
 }
 
-export type TradeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "symbol" | "status" | "side" | "amount" | "entryPrice" | "exitPrice" | "pnl" | "openedAt" | "closedAt" | "userId", ExtArgs["result"]["trade"]>
+export type TradeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "botId" | "symbol" | "status" | "side" | "amount" | "entryPrice" | "exitPrice" | "pnl" | "exitReason" | "createdAt" | "closedAt", ExtArgs["result"]["trade"]>
 export type TradeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bot?: boolean | Prisma.BotDefaultArgs<ExtArgs>
 }
 export type TradeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bot?: boolean | Prisma.BotDefaultArgs<ExtArgs>
 }
 export type TradeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  bot?: boolean | Prisma.BotDefaultArgs<ExtArgs>
 }
 
 export type $TradePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Trade"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    bot: Prisma.$BotPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    botId: string
     symbol: string
     status: string
     side: string
@@ -780,9 +810,9 @@ export type $TradePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     entryPrice: number
     exitPrice: number | null
     pnl: number | null
-    openedAt: Date
+    exitReason: string | null
+    createdAt: Date
     closedAt: Date | null
-    userId: string
   }, ExtArgs["result"]["trade"]>
   composites: {}
 }
@@ -1177,7 +1207,7 @@ readonly fields: TradeFieldRefs;
  */
 export interface Prisma__TradeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  bot<T extends Prisma.BotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BotDefaultArgs<ExtArgs>>): Prisma.Prisma__BotClient<runtime.Types.Result.GetResult<Prisma.$BotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1208,6 +1238,7 @@ export interface Prisma__TradeClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface TradeFieldRefs {
   readonly id: Prisma.FieldRef<"Trade", 'String'>
+  readonly botId: Prisma.FieldRef<"Trade", 'String'>
   readonly symbol: Prisma.FieldRef<"Trade", 'String'>
   readonly status: Prisma.FieldRef<"Trade", 'String'>
   readonly side: Prisma.FieldRef<"Trade", 'String'>
@@ -1215,9 +1246,9 @@ export interface TradeFieldRefs {
   readonly entryPrice: Prisma.FieldRef<"Trade", 'Float'>
   readonly exitPrice: Prisma.FieldRef<"Trade", 'Float'>
   readonly pnl: Prisma.FieldRef<"Trade", 'Float'>
-  readonly openedAt: Prisma.FieldRef<"Trade", 'DateTime'>
+  readonly exitReason: Prisma.FieldRef<"Trade", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Trade", 'DateTime'>
   readonly closedAt: Prisma.FieldRef<"Trade", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"Trade", 'String'>
 }
     
 

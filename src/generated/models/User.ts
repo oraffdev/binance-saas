@@ -190,7 +190,7 @@ export type UserWhereInput = {
   apiSecret?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  trades?: Prisma.TradeListRelationFilter
+  bots?: Prisma.BotListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -200,7 +200,7 @@ export type UserOrderByWithRelationInput = {
   apiSecret?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  trades?: Prisma.TradeOrderByRelationAggregateInput
+  bots?: Prisma.BotOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -213,7 +213,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   apiSecret?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  trades?: Prisma.TradeListRelationFilter
+  bots?: Prisma.BotListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -247,7 +247,7 @@ export type UserCreateInput = {
   apiSecret: string
   isActive?: boolean
   createdAt?: Date | string
-  trades?: Prisma.TradeCreateNestedManyWithoutUserInput
+  bots?: Prisma.BotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -257,7 +257,7 @@ export type UserUncheckedCreateInput = {
   apiSecret: string
   isActive?: boolean
   createdAt?: Date | string
-  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutUserInput
+  bots?: Prisma.BotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -267,7 +267,7 @@ export type UserUpdateInput = {
   apiSecret?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trades?: Prisma.TradeUpdateManyWithoutUserNestedInput
+  bots?: Prisma.BotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -277,7 +277,7 @@ export type UserUncheckedUpdateInput = {
   apiSecret?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  trades?: Prisma.TradeUncheckedUpdateManyWithoutUserNestedInput
+  bots?: Prisma.BotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -351,21 +351,21 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutTradesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTradesInput, Prisma.UserUncheckedCreateWithoutTradesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTradesInput
+export type UserCreateNestedOneWithoutBotsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBotsInput, Prisma.UserUncheckedCreateWithoutBotsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBotsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutTradesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTradesInput, Prisma.UserUncheckedCreateWithoutTradesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTradesInput
-  upsert?: Prisma.UserUpsertWithoutTradesInput
+export type UserUpdateOneRequiredWithoutBotsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBotsInput, Prisma.UserUncheckedCreateWithoutBotsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBotsInput
+  upsert?: Prisma.UserUpsertWithoutBotsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTradesInput, Prisma.UserUpdateWithoutTradesInput>, Prisma.UserUncheckedUpdateWithoutTradesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBotsInput, Prisma.UserUpdateWithoutBotsInput>, Prisma.UserUncheckedUpdateWithoutBotsInput>
 }
 
-export type UserCreateWithoutTradesInput = {
+export type UserCreateWithoutBotsInput = {
   id?: string
   email: string
   apiKey: string
@@ -374,7 +374,7 @@ export type UserCreateWithoutTradesInput = {
   createdAt?: Date | string
 }
 
-export type UserUncheckedCreateWithoutTradesInput = {
+export type UserUncheckedCreateWithoutBotsInput = {
   id?: string
   email: string
   apiKey: string
@@ -383,23 +383,23 @@ export type UserUncheckedCreateWithoutTradesInput = {
   createdAt?: Date | string
 }
 
-export type UserCreateOrConnectWithoutTradesInput = {
+export type UserCreateOrConnectWithoutBotsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTradesInput, Prisma.UserUncheckedCreateWithoutTradesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBotsInput, Prisma.UserUncheckedCreateWithoutBotsInput>
 }
 
-export type UserUpsertWithoutTradesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTradesInput, Prisma.UserUncheckedUpdateWithoutTradesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTradesInput, Prisma.UserUncheckedCreateWithoutTradesInput>
+export type UserUpsertWithoutBotsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBotsInput, Prisma.UserUncheckedUpdateWithoutBotsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBotsInput, Prisma.UserUncheckedCreateWithoutBotsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutTradesInput = {
+export type UserUpdateToOneWithWhereWithoutBotsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTradesInput, Prisma.UserUncheckedUpdateWithoutTradesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBotsInput, Prisma.UserUncheckedUpdateWithoutBotsInput>
 }
 
-export type UserUpdateWithoutTradesInput = {
+export type UserUpdateWithoutBotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   apiKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -408,7 +408,7 @@ export type UserUpdateWithoutTradesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type UserUncheckedUpdateWithoutTradesInput = {
+export type UserUncheckedUpdateWithoutBotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   apiKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -423,11 +423,11 @@ export type UserUncheckedUpdateWithoutTradesInput = {
  */
 
 export type UserCountOutputType = {
-  trades: number
+  bots: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trades?: boolean | UserCountOutputTypeCountTradesArgs
+  bots?: boolean | UserCountOutputTypeCountBotsArgs
 }
 
 /**
@@ -443,8 +443,8 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TradeWhereInput
+export type UserCountOutputTypeCountBotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BotWhereInput
 }
 
 
@@ -455,7 +455,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   apiSecret?: boolean
   isActive?: boolean
   createdAt?: boolean
-  trades?: boolean | Prisma.User$tradesArgs<ExtArgs>
+  bots?: boolean | Prisma.User$botsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -488,7 +488,7 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "apiKey" | "apiSecret" | "isActive" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  trades?: boolean | Prisma.User$tradesArgs<ExtArgs>
+  bots?: boolean | Prisma.User$botsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -497,7 +497,7 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    trades: Prisma.$TradePayload<ExtArgs>[]
+    bots: Prisma.$BotPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -900,7 +900,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  trades<T extends Prisma.User$tradesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tradesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bots<T extends Prisma.User$botsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$botsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1324,27 +1324,27 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.trades
+ * User.bots
  */
-export type User$tradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$botsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Trade
+   * Select specific fields to fetch from the Bot
    */
-  select?: Prisma.TradeSelect<ExtArgs> | null
+  select?: Prisma.BotSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Trade
+   * Omit specific fields from the Bot
    */
-  omit?: Prisma.TradeOmit<ExtArgs> | null
+  omit?: Prisma.BotOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TradeInclude<ExtArgs> | null
-  where?: Prisma.TradeWhereInput
-  orderBy?: Prisma.TradeOrderByWithRelationInput | Prisma.TradeOrderByWithRelationInput[]
-  cursor?: Prisma.TradeWhereUniqueInput
+  include?: Prisma.BotInclude<ExtArgs> | null
+  where?: Prisma.BotWhereInput
+  orderBy?: Prisma.BotOrderByWithRelationInput | Prisma.BotOrderByWithRelationInput[]
+  cursor?: Prisma.BotWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TradeScalarFieldEnum | Prisma.TradeScalarFieldEnum[]
+  distinct?: Prisma.BotScalarFieldEnum | Prisma.BotScalarFieldEnum[]
 }
 
 /**
