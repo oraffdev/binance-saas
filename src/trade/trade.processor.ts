@@ -102,14 +102,20 @@ export class TradeProcessor extends WorkerHost {
 				}
 
 				// 2. Tenta pegar o preço atual para estimar PnL
+				// 2. Tenta pegar o preço atual
 				const ticker = await exchange.fetchTicker(trade.symbol);
-				const exitPrice = ticker.last;
+
+				// CORREÇÃO: Se ticker.last for undefined, usamos 0 (embora na Binance Futures sempre venha)
+				const exitPrice = ticker.last || 0;
 
 				let pnl = 0;
-				if (trade.side === "BUY_LONG") {
-					pnl = (exitPrice - trade.entryPrice) * trade.amount;
-				} else {
-					pnl = (trade.entryPrice - exitPrice) * trade.amount;
+				// Adicionei uma proteção extra para não calcular PnL com preço zero
+				if (exitPrice > 0) {
+					if (trade.side === "BUY_LONG") {
+						pnl = (exitPrice - trade.entryPrice) * trade.amount;
+					} else {
+						pnl = (trade.entryPrice - exitPrice) * trade.amount;
+					}
 				}
 
 				// 3. Atualiza Banco
@@ -150,13 +156,18 @@ export class TradeProcessor extends WorkerHost {
 			ccxtTimeframe,
 		);
 
-		// ANÁLISE DETALHADA
 		const analysis = this.strategyService.analyzeMarket(candles);
 
 		if (analysis.action !== "NEUTRAL") {
-			const currentPrice = candles[candles.length - 1].close;
+			// Proteção contra candle vazio
+			const lastCandle = candles[candles.length - 1];
+			if (!lastCandle || !lastCandle.close) {
+				this.logger.warn("Sinal ignorado: Dados de preço incompletos.");
+				return;
+			}
+			const currentPrice = lastCandle.close;
 
-			// Log de Sucesso (Ação Realizada)
+			// CORREÇÃO: Usamos 'analysis.action' e 'analysis.reason'
 			this.logger.log(
 				`🚀 SINAL ${analysis.action} | Motivo: ${analysis.reason} | ${analysis.details}`,
 			);
@@ -168,11 +179,8 @@ export class TradeProcessor extends WorkerHost {
 				currentPrice,
 			);
 		} else {
-			// Log de "Espera" (Explica o porquê não entrou)
-			// Usamos .debug para não poluir demais, ou .log se quiser ver sempre
-			this.logger.log(
-				`💤 ${bot.name} (Wait): ${analysis.reason} | ${analysis.details}`,
-			);
+			// Log de espera
+			this.logger.debug(`💤 ${bot.name} (Wait): ${analysis.reason}`);
 		}
 	}
 	// --- ⚡ LÓGICA DE EXECUÇÃO (BRACKET) ---

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Bot" ADD COLUMN     "autoTune" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "lastTunedAt" TIMESTAMP(3),
+ADD COLUMN     "tuneLookbackDays" INTEGER NOT NULL DEFAULT 15;

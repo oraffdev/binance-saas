@@ -43,6 +43,10 @@ model Bot {
   sl       Float // Stop Loss (ex: 0.01 para 1%)
   isActive Boolean @default(true)
 
+  autoTune         Boolean   @default(false) // Usuário quer otimização automática?
+  lastTunedAt      DateTime? // Quando foi a última vez que otimizamos?
+  tuneLookbackDays Int       @default(15)
+
   userId String
   user   User   @relation("UserBots", fields: [userId], references: [id])
 

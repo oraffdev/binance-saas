@@ -688,6 +688,9 @@ export const BotScalarFieldEnum = {
   tp: 'tp',
   sl: 'sl',
   isActive: 'isActive',
+  autoTune: 'autoTune',
+  lastTunedAt: 'lastTunedAt',
+  tuneLookbackDays: 'tuneLookbackDays',
   userId: 'userId'
 } as const
 

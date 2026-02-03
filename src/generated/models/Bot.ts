@@ -30,12 +30,14 @@ export type BotAvgAggregateOutputType = {
   amount: number | null
   tp: number | null
   sl: number | null
+  tuneLookbackDays: number | null
 }
 
 export type BotSumAggregateOutputType = {
   amount: number | null
   tp: number | null
   sl: number | null
+  tuneLookbackDays: number | null
 }
 
 export type BotMinAggregateOutputType = {
@@ -47,6 +49,9 @@ export type BotMinAggregateOutputType = {
   tp: number | null
   sl: number | null
   isActive: boolean | null
+  autoTune: boolean | null
+  lastTunedAt: Date | null
+  tuneLookbackDays: number | null
   userId: string | null
 }
 
@@ -59,6 +64,9 @@ export type BotMaxAggregateOutputType = {
   tp: number | null
   sl: number | null
   isActive: boolean | null
+  autoTune: boolean | null
+  lastTunedAt: Date | null
+  tuneLookbackDays: number | null
   userId: string | null
 }
 
@@ -71,6 +79,9 @@ export type BotCountAggregateOutputType = {
   tp: number
   sl: number
   isActive: number
+  autoTune: number
+  lastTunedAt: number
+  tuneLookbackDays: number
   userId: number
   _all: number
 }
@@ -80,12 +91,14 @@ export type BotAvgAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  tuneLookbackDays?: true
 }
 
 export type BotSumAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  tuneLookbackDays?: true
 }
 
 export type BotMinAggregateInputType = {
@@ -97,6 +110,9 @@ export type BotMinAggregateInputType = {
   tp?: true
   sl?: true
   isActive?: true
+  autoTune?: true
+  lastTunedAt?: true
+  tuneLookbackDays?: true
   userId?: true
 }
 
@@ -109,6 +125,9 @@ export type BotMaxAggregateInputType = {
   tp?: true
   sl?: true
   isActive?: true
+  autoTune?: true
+  lastTunedAt?: true
+  tuneLookbackDays?: true
   userId?: true
 }
 
@@ -121,6 +140,9 @@ export type BotCountAggregateInputType = {
   tp?: true
   sl?: true
   isActive?: true
+  autoTune?: true
+  lastTunedAt?: true
+  tuneLookbackDays?: true
   userId?: true
   _all?: true
 }
@@ -220,6 +242,9 @@ export type BotGroupByOutputType = {
   tp: number
   sl: number
   isActive: boolean
+  autoTune: boolean
+  lastTunedAt: Date | null
+  tuneLookbackDays: number
   userId: string
   _count: BotCountAggregateOutputType | null
   _avg: BotAvgAggregateOutputType | null
@@ -255,6 +280,9 @@ export type BotWhereInput = {
   tp?: Prisma.FloatFilter<"Bot"> | number
   sl?: Prisma.FloatFilter<"Bot"> | number
   isActive?: Prisma.BoolFilter<"Bot"> | boolean
+  autoTune?: Prisma.BoolFilter<"Bot"> | boolean
+  lastTunedAt?: Prisma.DateTimeNullableFilter<"Bot"> | Date | string | null
+  tuneLookbackDays?: Prisma.IntFilter<"Bot"> | number
   userId?: Prisma.StringFilter<"Bot"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   trades?: Prisma.TradeListRelationFilter
@@ -269,6 +297,9 @@ export type BotOrderByWithRelationInput = {
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  autoTune?: Prisma.SortOrder
+  lastTunedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   trades?: Prisma.TradeOrderByRelationAggregateInput
@@ -286,6 +317,9 @@ export type BotWhereUniqueInput = Prisma.AtLeast<{
   tp?: Prisma.FloatFilter<"Bot"> | number
   sl?: Prisma.FloatFilter<"Bot"> | number
   isActive?: Prisma.BoolFilter<"Bot"> | boolean
+  autoTune?: Prisma.BoolFilter<"Bot"> | boolean
+  lastTunedAt?: Prisma.DateTimeNullableFilter<"Bot"> | Date | string | null
+  tuneLookbackDays?: Prisma.IntFilter<"Bot"> | number
   userId?: Prisma.StringFilter<"Bot"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   trades?: Prisma.TradeListRelationFilter
@@ -300,6 +334,9 @@ export type BotOrderByWithAggregationInput = {
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  autoTune?: Prisma.SortOrder
+  lastTunedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.BotCountOrderByAggregateInput
   _avg?: Prisma.BotAvgOrderByAggregateInput
@@ -320,6 +357,9 @@ export type BotScalarWhereWithAggregatesInput = {
   tp?: Prisma.FloatWithAggregatesFilter<"Bot"> | number
   sl?: Prisma.FloatWithAggregatesFilter<"Bot"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"Bot"> | boolean
+  autoTune?: Prisma.BoolWithAggregatesFilter<"Bot"> | boolean
+  lastTunedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Bot"> | Date | string | null
+  tuneLookbackDays?: Prisma.IntWithAggregatesFilter<"Bot"> | number
   userId?: Prisma.StringWithAggregatesFilter<"Bot"> | string
 }
 
@@ -332,6 +372,9 @@ export type BotCreateInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   user: Prisma.UserCreateNestedOneWithoutBotsInput
   trades?: Prisma.TradeCreateNestedManyWithoutBotInput
 }
@@ -345,6 +388,9 @@ export type BotUncheckedCreateInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   userId: string
   trades?: Prisma.TradeUncheckedCreateNestedManyWithoutBotInput
 }
@@ -358,6 +404,9 @@ export type BotUpdateInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutBotsNestedInput
   trades?: Prisma.TradeUpdateManyWithoutBotNestedInput
 }
@@ -371,6 +420,9 @@ export type BotUncheckedUpdateInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   trades?: Prisma.TradeUncheckedUpdateManyWithoutBotNestedInput
 }
@@ -384,6 +436,9 @@ export type BotCreateManyInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   userId: string
 }
 
@@ -396,6 +451,9 @@ export type BotUpdateManyMutationInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type BotUncheckedUpdateManyInput = {
@@ -407,6 +465,9 @@ export type BotUncheckedUpdateManyInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -429,6 +490,9 @@ export type BotCountOrderByAggregateInput = {
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  autoTune?: Prisma.SortOrder
+  lastTunedAt?: Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -436,6 +500,7 @@ export type BotAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
 }
 
 export type BotMaxOrderByAggregateInput = {
@@ -447,6 +512,9 @@ export type BotMaxOrderByAggregateInput = {
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  autoTune?: Prisma.SortOrder
+  lastTunedAt?: Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -459,6 +527,9 @@ export type BotMinOrderByAggregateInput = {
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  autoTune?: Prisma.SortOrder
+  lastTunedAt?: Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -466,6 +537,7 @@ export type BotSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  tuneLookbackDays?: Prisma.SortOrder
 }
 
 export type BotScalarRelationFilter = {
@@ -527,6 +599,18 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type BotCreateNestedOneWithoutTradesInput = {
   create?: Prisma.XOR<Prisma.BotCreateWithoutTradesInput, Prisma.BotUncheckedCreateWithoutTradesInput>
   connectOrCreate?: Prisma.BotCreateOrConnectWithoutTradesInput
@@ -550,6 +634,9 @@ export type BotCreateWithoutUserInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   trades?: Prisma.TradeCreateNestedManyWithoutBotInput
 }
 
@@ -562,6 +649,9 @@ export type BotUncheckedCreateWithoutUserInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   trades?: Prisma.TradeUncheckedCreateNestedManyWithoutBotInput
 }
 
@@ -603,6 +693,9 @@ export type BotScalarWhereInput = {
   tp?: Prisma.FloatFilter<"Bot"> | number
   sl?: Prisma.FloatFilter<"Bot"> | number
   isActive?: Prisma.BoolFilter<"Bot"> | boolean
+  autoTune?: Prisma.BoolFilter<"Bot"> | boolean
+  lastTunedAt?: Prisma.DateTimeNullableFilter<"Bot"> | Date | string | null
+  tuneLookbackDays?: Prisma.IntFilter<"Bot"> | number
   userId?: Prisma.StringFilter<"Bot"> | string
 }
 
@@ -615,6 +708,9 @@ export type BotCreateWithoutTradesInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   user: Prisma.UserCreateNestedOneWithoutBotsInput
 }
 
@@ -627,6 +723,9 @@ export type BotUncheckedCreateWithoutTradesInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
   userId: string
 }
 
@@ -655,6 +754,9 @@ export type BotUpdateWithoutTradesInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutBotsNestedInput
 }
 
@@ -667,6 +769,9 @@ export type BotUncheckedUpdateWithoutTradesInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -679,6 +784,9 @@ export type BotCreateManyUserInput = {
   tp: number
   sl: number
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: Date | string | null
+  tuneLookbackDays?: number
 }
 
 export type BotUpdateWithoutUserInput = {
@@ -690,6 +798,9 @@ export type BotUpdateWithoutUserInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   trades?: Prisma.TradeUpdateManyWithoutBotNestedInput
 }
 
@@ -702,6 +813,9 @@ export type BotUncheckedUpdateWithoutUserInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
   trades?: Prisma.TradeUncheckedUpdateManyWithoutBotNestedInput
 }
 
@@ -714,6 +828,9 @@ export type BotUncheckedUpdateManyWithoutUserInput = {
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tuneLookbackDays?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -756,6 +873,9 @@ export type BotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   tp?: boolean
   sl?: boolean
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: boolean
+  tuneLookbackDays?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   trades?: boolean | Prisma.Bot$tradesArgs<ExtArgs>
@@ -771,6 +891,9 @@ export type BotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   tp?: boolean
   sl?: boolean
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: boolean
+  tuneLookbackDays?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bot"]>
@@ -784,6 +907,9 @@ export type BotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   tp?: boolean
   sl?: boolean
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: boolean
+  tuneLookbackDays?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bot"]>
@@ -797,10 +923,13 @@ export type BotSelectScalar = {
   tp?: boolean
   sl?: boolean
   isActive?: boolean
+  autoTune?: boolean
+  lastTunedAt?: boolean
+  tuneLookbackDays?: boolean
   userId?: boolean
 }
 
-export type BotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "symbol" | "timeframe" | "amount" | "tp" | "sl" | "isActive" | "userId", ExtArgs["result"]["bot"]>
+export type BotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "symbol" | "timeframe" | "amount" | "tp" | "sl" | "isActive" | "autoTune" | "lastTunedAt" | "tuneLookbackDays" | "userId", ExtArgs["result"]["bot"]>
 export type BotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   trades?: boolean | Prisma.Bot$tradesArgs<ExtArgs>
@@ -828,6 +957,9 @@ export type $BotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     tp: number
     sl: number
     isActive: boolean
+    autoTune: boolean
+    lastTunedAt: Date | null
+    tuneLookbackDays: number
     userId: string
   }, ExtArgs["result"]["bot"]>
   composites: {}
@@ -1262,6 +1394,9 @@ export interface BotFieldRefs {
   readonly tp: Prisma.FieldRef<"Bot", 'Float'>
   readonly sl: Prisma.FieldRef<"Bot", 'Float'>
   readonly isActive: Prisma.FieldRef<"Bot", 'Boolean'>
+  readonly autoTune: Prisma.FieldRef<"Bot", 'Boolean'>
+  readonly lastTunedAt: Prisma.FieldRef<"Bot", 'DateTime'>
+  readonly tuneLookbackDays: Prisma.FieldRef<"Bot", 'Int'>
   readonly userId: Prisma.FieldRef<"Bot", 'String'>
 }
     

@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "nodenext",
-		"moduleResolution": "nodenext",
+		"moduleResolution": "NodeNext",
 		"resolvePackageJsonExports": true,
 		"esModuleInterop": true,
 		"isolatedModules": true,
@@ -15,14 +15,17 @@
 		"outDir": "./dist",
 		"baseUrl": "./",
 		"incremental": true,
-		"skipLibCheck": true,
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true,
 		"noImplicitAny": false,
 		"strictBindCallApply": false,
 		"noFallthroughCasesInSwitch": false,
 		"paths": {
-			"@/*": ["src/*"]
-		}
+			"@/*": ["src/*"],
+			"ccxt": ["./node_modules/ccxt/js/ccxt.d.ts"]
+		},
+		"preserveSymlinks": true, // Ajuda com a estrutura do pnpm
+		"resolveJsonModule": true, // Útil para ccxt
+		"skipLibCheck": true
 	}
 }
