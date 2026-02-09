@@ -25,7 +25,7 @@ type SimulationResult = {
 };
 
 @Processor("optimizer-queue", {
-	concurrency: 1, // Otimização é pesada, 1 por vez para não sobrecarregar
+	concurrency: 2, // Otimização é pesada, 1 por vez para não sobrecarregar
 	lockDuration: 3600000,
 	lockRenewTime: 1800000,
 })
@@ -53,6 +53,7 @@ export class OptimizerProcessor extends WorkerHost {
 				options: { defaultType: "future" },
 				enableRateLimit: true,
 			});
+			exchange.enableDemoTrading(true);
 
 			// 2. Download de um histórico de dados mais leve (6 meses)
 			const tfMap: Record<string, string> = { M15: "15m", H1: "1h", H4: "4h" };

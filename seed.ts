@@ -61,13 +61,13 @@ async function main() {
 	});
 
 	// 4. Cria Bot 2 (Swing de SOL - 1 hora)
-	console.log("🤖 Criando Bot SOL...");
+	console.log("🤖 Criando Bot DUSK...");
 	await prisma.bot.create({
 		data: {
-			name: "SOL Swing Trade",
+			name: "DUSK Scalper",
 			userId: user.id,
-			symbol: "SOL/USDT",
-			timeframe: Timeframe.H1,
+			symbol: "DUSK/USDT",
+			timeframe: Timeframe.M15,
 			amount: 100,
 			tp: 0.05,
 			sl: 0.025,

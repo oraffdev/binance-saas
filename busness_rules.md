@@ -9,3 +9,8 @@
   2. RSI > 30 (Ainda tem espaço para cair, não está sobrevendido)
   3. MACD Cruzamento de Baixa (Momentum negativo iniciando)
 
+
+
+### AVISO
+
+Para Binance: Ao usar testnet para validacao e necessario usar o Demo-Trading com API KEYS especificas para esse ambiente

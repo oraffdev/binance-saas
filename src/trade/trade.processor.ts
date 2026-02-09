@@ -53,7 +53,7 @@ export class TradeProcessor extends WorkerHost {
 				enableRateLimit: true,
 			});
 
-			exchange.setSandboxMode(true); // MODO TESTNET (Remova para produção)
+			exchange.enableDemoTrading(true); // binance Demo-trading ( testnet is deprecated)
 
 			// Carrega mercados (Essencial para precisão de preços)
 			await exchange.loadMarkets();
@@ -192,8 +192,15 @@ export class TradeProcessor extends WorkerHost {
 		let tpPrice = 0;
 		let slPrice = 0;
 
-		if (bot.useDynamicSLTP && bot.atrMultiplier && bot.tpSlRatio && analysis.atr) {
-			this.logger.log(`🤖 Usando modo de saída Dinâmico (ATR) para ${bot.name}`);
+		if (
+			bot.useDynamicSLTP &&
+			bot.atrMultiplier &&
+			bot.tpSlRatio &&
+			analysis.atr
+		) {
+			this.logger.log(
+				`🤖 Usando modo de saída Dinâmico (ATR) para ${bot.name}`,
+			);
 			const slDistance = analysis.atr * bot.atrMultiplier;
 			const tpDistance = slDistance * bot.tpSlRatio;
 
