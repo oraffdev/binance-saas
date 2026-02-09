@@ -45,15 +45,12 @@ export class TradeScheduler {
 		);
 
 		for (const bot of uniqueBots) {
-			// CRIAMOS UM ID ÚNICO BASEADO NO TEMPO
-			// Ex: "opt-XRP/USDT-M15-1738598400000"
-			// Assim, se o cron rodar 2x sem querer, o segundo é ignorado.
 			const jobId = `opt-${bot.symbol}-${bot.timeframe}-${Date.now()}`;
 			await this.optimizerQueue.add(
 				"optimize-bot",
 				{ symbol: bot.symbol, timeframe: bot.timeframe },
 				{
-					jobId: jobId, // <--- O SEGREDO ESTÁ AQUI
+					jobId: jobId,
 					removeOnComplete: true,
 					attempts: 3,
 				},

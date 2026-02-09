@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { EMA, RSI, MACD } from "technicalindicators";
+import { EMA, RSI, MACD, ATR } from "technicalindicators";
 
 // Definindo tipos para clareza
 export interface CandleData {
@@ -21,6 +21,7 @@ export interface StrategyResult {
 	action: "BUY_LONG" | "SELL_SHORT" | "NEUTRAL";
 	reason: string; // Explicação humana (ex: "RSI alto demais")
 	details: string; // Valores técnicos (ex: "RSI: 55 | Price: 100 > EMA: 90")
+	atr?: number;
 }
 
 @Injectable()
@@ -34,7 +35,7 @@ export class StrategyService {
 	 * @param candles Array de candles (o mais recente é o último do array)
 	 */
 	public analyzeMarket(candles: any[]): StrategyResult {
-		// Precisamos de pelo menos 200 candles para EMA
+		// Precisamos de pelo menos 200 candles para EMA e 14 para ATR
 		if (candles.length < 200) {
 			return {
 				action: "NEUTRAL",
@@ -43,8 +44,10 @@ export class StrategyService {
 			};
 		}
 
-		// 1. Prepara os dados (Array de preços de fechamento)
+		// 1. Prepara os dados
 		const closes = candles.map((c) => c.close);
+		const highs = candles.map((c) => c.high);
+		const lows = candles.map((c) => c.low);
 		const currentPrice = closes[closes.length - 1];
 
 		// 2. Calcula Indicadores
@@ -62,13 +65,23 @@ export class StrategyService {
 		});
 		const ema = emaValues[emaValues.length - 1];
 
+		// ATR (14 períodos - Volatilidade)
+		const atrValues = ATR.calculate({
+			high: highs,
+			low: lows,
+			close: closes,
+			period: 14,
+		});
+		const atr = atrValues[atrValues.length - 1];
+
 		// Formatação para logs (arredondar valores)
 		const rsiFmt = rsi.toFixed(2);
 		const priceFmt = currentPrice.toFixed(4);
 		const emaFmt = ema.toFixed(4);
+		const atrFmt = atr.toFixed(4);
 
 		// String de detalhes técnicos para logar sempre
-		const details = `Preço: ${priceFmt} | EMA200: ${emaFmt} | RSI: ${rsiFmt}`;
+		const details = `Preço: ${priceFmt} | EMA200: ${emaFmt} | RSI: ${rsiFmt} | ATR: ${atrFmt}`;
 
 		// 3. Lógica de Decisão (O "Cérebro")
 
@@ -80,6 +93,7 @@ export class StrategyService {
 					action: "BUY_LONG",
 					reason: "Tendência de Alta confirmada + RSI Sobrevendido",
 					details,
+					atr,
 				};
 			}
 			// Se está acima da EMA mas RSI não está baixo
@@ -88,6 +102,7 @@ export class StrategyService {
 					action: "NEUTRAL",
 					reason: `Tendência de Alta (OK), mas RSI ${rsiFmt} ainda não está baixo o suficiente (< ${this.RSI_LONG_THRESHOLD})`,
 					details,
+					atr,
 				};
 			}
 		}
@@ -100,6 +115,7 @@ export class StrategyService {
 					action: "SELL_SHORT",
 					reason: "Tendência de Baixa confirmada + RSI Sobrecomprado",
 					details,
+					atr,
 				};
 			}
 			// Se está abaixo da EMA mas RSI não está alto
@@ -108,11 +124,12 @@ export class StrategyService {
 					action: "NEUTRAL",
 					reason: `Tendência de Baixa (OK), mas RSI ${rsiFmt} ainda não está alto o suficiente (> ${this.RSI_SHORT_THRESHOLD})`,
 					details,
+					atr,
 				};
 			}
 		}
 
 		// Fallback (caso raro onde preço == ema)
-		return { action: "NEUTRAL", reason: "Indefinido", details };
+		return { action: "NEUTRAL", reason: "Indefinido", details, atr };
 	}
 }

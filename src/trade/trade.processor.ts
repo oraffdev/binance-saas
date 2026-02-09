@@ -3,12 +3,14 @@ import { Job } from "bullmq";
 import { Logger } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { EncryptionService } from "../common/services/encryption.service";
-import { StrategyService } from "../strategy/strategy.service";
+import { StrategyResult, StrategyService } from "../strategy/strategy.service";
 import * as ccxt from "ccxt";
 import { Bot, Trade } from "@/generated/client";
 
 @Processor("trade-queue", {
 	concurrency: 10, // Processa 10 bots simultaneamente por instância
+	lockDuration: 300000, // 5 minutos em milissegundos
+	lockRenewTime: 120000, // Renova a cada 2 minutos
 })
 export class TradeProcessor extends WorkerHost {
 	private readonly logger = new Logger(TradeProcessor.name);
@@ -70,12 +72,9 @@ export class TradeProcessor extends WorkerHost {
 			}
 		} catch (error) {
 			this.logger.error(`❌ Falha no Bot ${botId}: ${error.message}`);
-			// Não damos throw error aqui para não travar a fila, apenas logamos.
-			// Se fosse erro de rede, o BullMQ tentaria de novo se dermos throw.
 		}
 	}
 
-	// --- 🔄 LÓGICA DE SINCRONIZAÇÃO ---
 	private async syncOpenTrade(
 		exchange: ccxt.Exchange,
 		trade: Trade,
@@ -142,7 +141,6 @@ export class TradeProcessor extends WorkerHost {
 		}
 	}
 
-	// --- 🚀 LÓGICA DE CAÇA (HUNT) ---
 	private async huntForTrades(exchange: ccxt.Exchange, bot: Bot) {
 		const tfMap: Record<string, string> = { M15: "15m", H1: "1h", H4: "4h" };
 		const ccxtTimeframe = tfMap[bot.timeframe];
@@ -159,7 +157,6 @@ export class TradeProcessor extends WorkerHost {
 		const analysis = this.strategyService.analyzeMarket(candles);
 
 		if (analysis.action !== "NEUTRAL") {
-			// Proteção contra candle vazio
 			const lastCandle = candles[candles.length - 1];
 			if (!lastCandle || !lastCandle.close) {
 				this.logger.warn("Sinal ignorado: Dados de preço incompletos.");
@@ -167,49 +164,57 @@ export class TradeProcessor extends WorkerHost {
 			}
 			const currentPrice = lastCandle.close;
 
-			// CORREÇÃO: Usamos 'analysis.action' e 'analysis.reason'
 			this.logger.log(
 				`🚀 SINAL ${analysis.action} | Motivo: ${analysis.reason} | ${analysis.details}`,
 			);
 
-			await this.executeBracketTrade(
-				exchange,
-				bot,
-				analysis.action,
-				currentPrice,
-			);
+			await this.executeBracketTrade(exchange, bot, analysis, currentPrice);
 		} else {
 			// Log de espera
 			this.logger.debug(`💤 ${bot.name} (Wait): ${analysis.reason}`);
 		}
 	}
-	// --- ⚡ LÓGICA DE EXECUÇÃO (BRACKET) ---
+
 	private async executeBracketTrade(
 		exchange: ccxt.Exchange,
 		bot: Bot,
-		side: string,
+		analysis: StrategyResult,
 		price: number,
 	) {
+		const { action: side } = analysis;
+		if (side === "NEUTRAL") return;
+
 		// Define direção Binance
 		const binanceSide = side === "BUY_LONG" ? "buy" : "sell";
 		const exitSide = side === "BUY_LONG" ? "sell" : "buy";
-
-		// LÊ AS CONFIGURAÇÕES DO BOT DO BANCO
-		const TAKE_PROFIT_PCT = bot.tp; // ex: 0.015
-		const STOP_LOSS_PCT = bot.sl; // ex: 0.01
-		const AMOUNT = bot.amount; // ex: 50
+		const { amount: AMOUNT } = bot;
 
 		let tpPrice = 0;
 		let slPrice = 0;
 
-		// Calcula Preços Alvo
-		if (side === "BUY_LONG") {
-			tpPrice = price * (1 + TAKE_PROFIT_PCT);
-			slPrice = price * (1 - STOP_LOSS_PCT);
+		if (bot.useDynamicSLTP && bot.atrMultiplier && bot.tpSlRatio && analysis.atr) {
+			this.logger.log(`🤖 Usando modo de saída Dinâmico (ATR) para ${bot.name}`);
+			const slDistance = analysis.atr * bot.atrMultiplier;
+			const tpDistance = slDistance * bot.tpSlRatio;
+
+			if (side === "BUY_LONG") {
+				slPrice = price - slDistance;
+				tpPrice = price + tpDistance;
+			} else {
+				slPrice = price + slDistance;
+				tpPrice = price - tpDistance;
+			}
 		} else {
-			// Short: Lucro na queda, Stop na subida
-			tpPrice = price * (1 - TAKE_PROFIT_PCT);
-			slPrice = price * (1 + STOP_LOSS_PCT);
+			this.logger.log(`🤖 Usando modo de saída Fixo (%) para ${bot.name}`);
+			const { tp: TAKE_PROFIT_PCT, sl: STOP_LOSS_PCT } = bot;
+
+			if (side === "BUY_LONG") {
+				tpPrice = price * (1 + TAKE_PROFIT_PCT);
+				slPrice = price * (1 - STOP_LOSS_PCT);
+			} else {
+				tpPrice = price * (1 - TAKE_PROFIT_PCT);
+				slPrice = price * (1 + STOP_LOSS_PCT);
+			}
 		}
 
 		// Formatação de Precisão (Obrigatório para Binance)
@@ -276,7 +281,6 @@ export class TradeProcessor extends WorkerHost {
 		}
 	}
 
-	// --- HELPERS ---
 	private async fetchCandles(
 		exchange: ccxt.Exchange,
 		symbol: string,

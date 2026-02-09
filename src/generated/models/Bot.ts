@@ -30,6 +30,8 @@ export type BotAvgAggregateOutputType = {
   amount: number | null
   tp: number | null
   sl: number | null
+  atrMultiplier: number | null
+  tpSlRatio: number | null
   tuneLookbackDays: number | null
 }
 
@@ -37,6 +39,8 @@ export type BotSumAggregateOutputType = {
   amount: number | null
   tp: number | null
   sl: number | null
+  atrMultiplier: number | null
+  tpSlRatio: number | null
   tuneLookbackDays: number | null
 }
 
@@ -48,6 +52,9 @@ export type BotMinAggregateOutputType = {
   amount: number | null
   tp: number | null
   sl: number | null
+  useDynamicSLTP: boolean | null
+  atrMultiplier: number | null
+  tpSlRatio: number | null
   isActive: boolean | null
   autoTune: boolean | null
   lastTunedAt: Date | null
@@ -63,6 +70,9 @@ export type BotMaxAggregateOutputType = {
   amount: number | null
   tp: number | null
   sl: number | null
+  useDynamicSLTP: boolean | null
+  atrMultiplier: number | null
+  tpSlRatio: number | null
   isActive: boolean | null
   autoTune: boolean | null
   lastTunedAt: Date | null
@@ -78,6 +88,9 @@ export type BotCountAggregateOutputType = {
   amount: number
   tp: number
   sl: number
+  useDynamicSLTP: number
+  atrMultiplier: number
+  tpSlRatio: number
   isActive: number
   autoTune: number
   lastTunedAt: number
@@ -91,6 +104,8 @@ export type BotAvgAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  atrMultiplier?: true
+  tpSlRatio?: true
   tuneLookbackDays?: true
 }
 
@@ -98,6 +113,8 @@ export type BotSumAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  atrMultiplier?: true
+  tpSlRatio?: true
   tuneLookbackDays?: true
 }
 
@@ -109,6 +126,9 @@ export type BotMinAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  useDynamicSLTP?: true
+  atrMultiplier?: true
+  tpSlRatio?: true
   isActive?: true
   autoTune?: true
   lastTunedAt?: true
@@ -124,6 +144,9 @@ export type BotMaxAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  useDynamicSLTP?: true
+  atrMultiplier?: true
+  tpSlRatio?: true
   isActive?: true
   autoTune?: true
   lastTunedAt?: true
@@ -139,6 +162,9 @@ export type BotCountAggregateInputType = {
   amount?: true
   tp?: true
   sl?: true
+  useDynamicSLTP?: true
+  atrMultiplier?: true
+  tpSlRatio?: true
   isActive?: true
   autoTune?: true
   lastTunedAt?: true
@@ -241,6 +267,9 @@ export type BotGroupByOutputType = {
   amount: number
   tp: number
   sl: number
+  useDynamicSLTP: boolean
+  atrMultiplier: number | null
+  tpSlRatio: number | null
   isActive: boolean
   autoTune: boolean
   lastTunedAt: Date | null
@@ -279,6 +308,9 @@ export type BotWhereInput = {
   amount?: Prisma.FloatFilter<"Bot"> | number
   tp?: Prisma.FloatFilter<"Bot"> | number
   sl?: Prisma.FloatFilter<"Bot"> | number
+  useDynamicSLTP?: Prisma.BoolFilter<"Bot"> | boolean
+  atrMultiplier?: Prisma.FloatNullableFilter<"Bot"> | number | null
+  tpSlRatio?: Prisma.FloatNullableFilter<"Bot"> | number | null
   isActive?: Prisma.BoolFilter<"Bot"> | boolean
   autoTune?: Prisma.BoolFilter<"Bot"> | boolean
   lastTunedAt?: Prisma.DateTimeNullableFilter<"Bot"> | Date | string | null
@@ -296,6 +328,9 @@ export type BotOrderByWithRelationInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  useDynamicSLTP?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrderInput | Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   autoTune?: Prisma.SortOrder
   lastTunedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -316,6 +351,9 @@ export type BotWhereUniqueInput = Prisma.AtLeast<{
   amount?: Prisma.FloatFilter<"Bot"> | number
   tp?: Prisma.FloatFilter<"Bot"> | number
   sl?: Prisma.FloatFilter<"Bot"> | number
+  useDynamicSLTP?: Prisma.BoolFilter<"Bot"> | boolean
+  atrMultiplier?: Prisma.FloatNullableFilter<"Bot"> | number | null
+  tpSlRatio?: Prisma.FloatNullableFilter<"Bot"> | number | null
   isActive?: Prisma.BoolFilter<"Bot"> | boolean
   autoTune?: Prisma.BoolFilter<"Bot"> | boolean
   lastTunedAt?: Prisma.DateTimeNullableFilter<"Bot"> | Date | string | null
@@ -333,6 +371,9 @@ export type BotOrderByWithAggregationInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  useDynamicSLTP?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrderInput | Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   autoTune?: Prisma.SortOrder
   lastTunedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -356,6 +397,9 @@ export type BotScalarWhereWithAggregatesInput = {
   amount?: Prisma.FloatWithAggregatesFilter<"Bot"> | number
   tp?: Prisma.FloatWithAggregatesFilter<"Bot"> | number
   sl?: Prisma.FloatWithAggregatesFilter<"Bot"> | number
+  useDynamicSLTP?: Prisma.BoolWithAggregatesFilter<"Bot"> | boolean
+  atrMultiplier?: Prisma.FloatNullableWithAggregatesFilter<"Bot"> | number | null
+  tpSlRatio?: Prisma.FloatNullableWithAggregatesFilter<"Bot"> | number | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Bot"> | boolean
   autoTune?: Prisma.BoolWithAggregatesFilter<"Bot"> | boolean
   lastTunedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Bot"> | Date | string | null
@@ -369,8 +413,11 @@ export type BotCreateInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -385,8 +432,11 @@ export type BotUncheckedCreateInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -403,6 +453,9 @@ export type BotUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -419,6 +472,9 @@ export type BotUncheckedUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -433,8 +489,11 @@ export type BotCreateManyInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -450,6 +509,9 @@ export type BotUpdateManyMutationInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -464,6 +526,9 @@ export type BotUncheckedUpdateManyInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -489,6 +554,9 @@ export type BotCountOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  useDynamicSLTP?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   autoTune?: Prisma.SortOrder
   lastTunedAt?: Prisma.SortOrder
@@ -500,6 +568,8 @@ export type BotAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrder
   tuneLookbackDays?: Prisma.SortOrder
 }
 
@@ -511,6 +581,9 @@ export type BotMaxOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  useDynamicSLTP?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   autoTune?: Prisma.SortOrder
   lastTunedAt?: Prisma.SortOrder
@@ -526,6 +599,9 @@ export type BotMinOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  useDynamicSLTP?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   autoTune?: Prisma.SortOrder
   lastTunedAt?: Prisma.SortOrder
@@ -537,6 +613,8 @@ export type BotSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   tp?: Prisma.SortOrder
   sl?: Prisma.SortOrder
+  atrMultiplier?: Prisma.SortOrder
+  tpSlRatio?: Prisma.SortOrder
   tuneLookbackDays?: Prisma.SortOrder
 }
 
@@ -599,6 +677,14 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
@@ -631,8 +717,11 @@ export type BotCreateWithoutUserInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -646,8 +735,11 @@ export type BotUncheckedCreateWithoutUserInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -692,6 +784,9 @@ export type BotScalarWhereInput = {
   amount?: Prisma.FloatFilter<"Bot"> | number
   tp?: Prisma.FloatFilter<"Bot"> | number
   sl?: Prisma.FloatFilter<"Bot"> | number
+  useDynamicSLTP?: Prisma.BoolFilter<"Bot"> | boolean
+  atrMultiplier?: Prisma.FloatNullableFilter<"Bot"> | number | null
+  tpSlRatio?: Prisma.FloatNullableFilter<"Bot"> | number | null
   isActive?: Prisma.BoolFilter<"Bot"> | boolean
   autoTune?: Prisma.BoolFilter<"Bot"> | boolean
   lastTunedAt?: Prisma.DateTimeNullableFilter<"Bot"> | Date | string | null
@@ -705,8 +800,11 @@ export type BotCreateWithoutTradesInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -720,8 +818,11 @@ export type BotUncheckedCreateWithoutTradesInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -753,6 +854,9 @@ export type BotUpdateWithoutTradesInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -768,6 +872,9 @@ export type BotUncheckedUpdateWithoutTradesInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -781,8 +888,11 @@ export type BotCreateManyUserInput = {
   symbol: string
   timeframe: $Enums.Timeframe
   amount?: number
-  tp: number
-  sl: number
+  tp?: number
+  sl?: number
+  useDynamicSLTP?: boolean
+  atrMultiplier?: number | null
+  tpSlRatio?: number | null
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: Date | string | null
@@ -797,6 +907,9 @@ export type BotUpdateWithoutUserInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -812,6 +925,9 @@ export type BotUncheckedUpdateWithoutUserInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -827,6 +943,9 @@ export type BotUncheckedUpdateManyWithoutUserInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   tp?: Prisma.FloatFieldUpdateOperationsInput | number
   sl?: Prisma.FloatFieldUpdateOperationsInput | number
+  useDynamicSLTP?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  atrMultiplier?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  tpSlRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autoTune?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastTunedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -872,6 +991,9 @@ export type BotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   amount?: boolean
   tp?: boolean
   sl?: boolean
+  useDynamicSLTP?: boolean
+  atrMultiplier?: boolean
+  tpSlRatio?: boolean
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: boolean
@@ -890,6 +1012,9 @@ export type BotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   amount?: boolean
   tp?: boolean
   sl?: boolean
+  useDynamicSLTP?: boolean
+  atrMultiplier?: boolean
+  tpSlRatio?: boolean
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: boolean
@@ -906,6 +1031,9 @@ export type BotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   amount?: boolean
   tp?: boolean
   sl?: boolean
+  useDynamicSLTP?: boolean
+  atrMultiplier?: boolean
+  tpSlRatio?: boolean
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: boolean
@@ -922,6 +1050,9 @@ export type BotSelectScalar = {
   amount?: boolean
   tp?: boolean
   sl?: boolean
+  useDynamicSLTP?: boolean
+  atrMultiplier?: boolean
+  tpSlRatio?: boolean
   isActive?: boolean
   autoTune?: boolean
   lastTunedAt?: boolean
@@ -929,7 +1060,7 @@ export type BotSelectScalar = {
   userId?: boolean
 }
 
-export type BotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "symbol" | "timeframe" | "amount" | "tp" | "sl" | "isActive" | "autoTune" | "lastTunedAt" | "tuneLookbackDays" | "userId", ExtArgs["result"]["bot"]>
+export type BotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "symbol" | "timeframe" | "amount" | "tp" | "sl" | "useDynamicSLTP" | "atrMultiplier" | "tpSlRatio" | "isActive" | "autoTune" | "lastTunedAt" | "tuneLookbackDays" | "userId", ExtArgs["result"]["bot"]>
 export type BotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   trades?: boolean | Prisma.Bot$tradesArgs<ExtArgs>
@@ -956,6 +1087,9 @@ export type $BotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     amount: number
     tp: number
     sl: number
+    useDynamicSLTP: boolean
+    atrMultiplier: number | null
+    tpSlRatio: number | null
     isActive: boolean
     autoTune: boolean
     lastTunedAt: Date | null
@@ -1393,6 +1527,9 @@ export interface BotFieldRefs {
   readonly amount: Prisma.FieldRef<"Bot", 'Float'>
   readonly tp: Prisma.FieldRef<"Bot", 'Float'>
   readonly sl: Prisma.FieldRef<"Bot", 'Float'>
+  readonly useDynamicSLTP: Prisma.FieldRef<"Bot", 'Boolean'>
+  readonly atrMultiplier: Prisma.FieldRef<"Bot", 'Float'>
+  readonly tpSlRatio: Prisma.FieldRef<"Bot", 'Float'>
   readonly isActive: Prisma.FieldRef<"Bot", 'Boolean'>
   readonly autoTune: Prisma.FieldRef<"Bot", 'Boolean'>
   readonly lastTunedAt: Prisma.FieldRef<"Bot", 'DateTime'>

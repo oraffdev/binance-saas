@@ -38,9 +38,15 @@ model Bot {
   symbol    String // Ex: "XRP/USDT"
   timeframe Timeframe // Ex: M15, H1
 
-  amount   Float   @default(1) // Quanto apostar em USDT
-  tp       Float // Take Profit (ex: 0.015 para 1.5%)
-  sl       Float // Stop Loss (ex: 0.01 para 1%)
+  amount Float @default(1) // Quanto apostar em USDT
+  tp     Float @default(0) // Take Profit (ex: 0.015 para 1.5%) - Opcional
+  sl     Float @default(0) // Stop Loss (ex: 0.01 para 1%) - Opcional
+
+  // --- Configs de Saída Dinâmica (ATR) ---
+  useDynamicSLTP Boolean @default(false)
+  atrMultiplier  Float? // Ex: 2 (SL = 2 * ATR)
+  tpSlRatio      Float? // Ex: 1.5 (TP = 1.5 * SL)
+
   isActive Boolean @default(true)
 
   autoTune         Boolean   @default(false) // Usuário quer otimização automática?

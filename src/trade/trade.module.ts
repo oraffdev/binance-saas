@@ -5,7 +5,7 @@ import { EncryptionService } from "src/common/services/encryption.service";
 import { BullModule } from "@nestjs/bullmq";
 import { TradeProcessor } from "./trade.processor";
 import { OptimizerProcessor } from "@/optimizer/optimizer.processor";
-import { TradeController } from './trade.controller';
+import { TradeController } from "./trade.controller";
 @Module({
 	imports: [
 		StrategyModule,
