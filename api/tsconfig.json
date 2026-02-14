@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"module": "nodenext",
+		"moduleResolution": "NodeNext",
+		"resolvePackageJsonExports": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"target": "ES2023",
+		"sourceMap": true,
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"incremental": true,
+		"strictNullChecks": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": false,
+		"strictBindCallApply": false,
+		"noFallthroughCasesInSwitch": false,
+		"paths": {
+			"@/*": ["src/*"],
+			"ccxt": ["./node_modules/ccxt/js/ccxt.d.ts"]
+		},
+		"preserveSymlinks": true, // Ajuda com a estrutura do pnpm
+		"resolveJsonModule": true, // Útil para ccxt
+		"skipLibCheck": true
+	}
+}
